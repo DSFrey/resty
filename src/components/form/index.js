@@ -14,6 +14,7 @@ export const Form = (props) => {
     const formData = {
       currentMethod,
       url: e.target[0].value,
+      body: e.target[2].value,
     };
     props.handleApiCall(formData);
   }
@@ -35,6 +36,10 @@ export const Form = (props) => {
               onClick={handleMethod}
             >{method}</span>
           })}
+        </label>
+        <label>
+          <span>JSON: </span>
+          <textarea name='JSON'></textarea>
         </label>
       </form>
     </>
