@@ -12,9 +12,9 @@ export const Form = (props) => {
   const handleSubmit = e => {
     e.preventDefault();
     const formData = {
-      currentMethod,
+      method: currentMethod,
       url: e.target[0].value,
-      body: e.target[2].value,
+      data: e.target[2].value,
     };
     props.handleApiCall(formData);
   }

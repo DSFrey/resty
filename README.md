@@ -9,4 +9,4 @@ Our application will be an API testing tool that can be run in any browser, allo
 <!-- To Be filled in by you the student as we iterate thru Module 6 Labs -->
 ## UML
 
-![UML ofr RESTy phase 1](./assets/resty-phase-1.png)
+![UML for RESTy phase 1](./assets/resty-phase-1.png)
