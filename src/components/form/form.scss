@@ -20,6 +20,11 @@ form {
         &:hover, &.active {
           background: #fff;
         }
+
+        &.selected {
+          background-color: #363636;
+          color:#efefef
+        }
       }
     }
   }
