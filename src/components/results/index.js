@@ -3,7 +3,7 @@ import './results.scss'
 
 export const Results = (props) => {
   return (
-    <section>
+    <section data-testid='results'>
       {props.loading
         ? <p>loading...</p>
         : props.data

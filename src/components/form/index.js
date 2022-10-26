@@ -21,7 +21,7 @@ export const Form = (props) => {
 
   return (
     <>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} data-testid='form'>
         <label >
           <span>URL: </span>
           <input name='url' type='text' />
