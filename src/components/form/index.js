@@ -1,29 +1,45 @@
+import { useState } from 'react';
 import './form.scss';
 
 export const Form = (props) => {
+  const availableMethods = ['GET', 'POST', 'PUT', 'DELETE']
+  const [currentMethod, setCurrentMethod] = useState('GET')
+
+  const handleMethod = (e) => {
+    setCurrentMethod(e.target.id)
+  }
 
   const handleSubmit = e => {
     e.preventDefault();
     const formData = {
-      method: 'GET',
-      url: 'https://pokeapi.co/api/v2/pokemon',
+      method: currentMethod,
+      url: e.target[0].value,
+      data: e.target[2].value,
     };
     props.handleApiCall(formData);
   }
 
   return (
     <>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} data-testid='form'>
         <label >
           <span>URL: </span>
           <input name='url' type='text' />
           <button type="submit">GO!</button>
         </label>
         <label className="methods">
-          <span id="get">GET</span>
-          <span id="post">POST</span>
-          <span id="put">PUT</span>
-          <span id="delete">DELETE</span>
+          {availableMethods.map(method => {
+            return <span
+              id={method}
+              key={method}
+              className={method === currentMethod ? 'selected' : ''}
+              onClick={handleMethod}
+            >{method}</span>
+          })}
+        </label>
+        <label>
+          <span>JSON: </span>
+          <textarea name='JSON'></textarea>
         </label>
       </form>
     </>
