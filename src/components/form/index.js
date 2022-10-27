@@ -26,7 +26,6 @@ export const Form = (props) => {
       url: currentUrl,
       data: currentData,
     };
-    console.log(formData)
     props.handleApiCall(formData);
   }
 
