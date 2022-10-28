@@ -7,7 +7,10 @@ export const Results = (props) => {
       {props.loading
         ? <p>loading...</p>
         : props.data
-          ? <JsonViewer value={props.data} />
+          ? <>
+            <JsonViewer value={props.data.headers} />
+            <JsonViewer value={props.data.data} />
+          </>
           : null
       }
     </section>

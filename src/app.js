@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useState, useReducer } from 'react';
 import axios from 'axios'
 
 import './app.scss';
@@ -10,38 +10,47 @@ import { Footer } from './components/footer';
 import { Form } from './components/form';
 import { Results } from './components/results';
 
-const App = () => {
-  const firstRender = useRef(true)
-  const [data, setData] = useState(null)
-  const [requestParams, setRequestParams] = useState({})
-  const [loading, setLoading] = useState(false)
+export const initialData = {
+  history: [],
+  showRequest: 0,
+  loading: false
+}
 
-  const handleRequestParams = (requestParams) => {
-    setRequestParams(requestParams)
+export const dataReducer = (state, action) => {
+  switch (action.type) {
+    case 'add':
+      return { ...state, history: [action.payload, ...state.history], showRequest: 0 };
+
+    case 'loading':
+      return { ...state, loading: !state.loading }
+
+    default:
+      return state;
   }
-  useEffect(() => {
-    if (firstRender.current) {
-      firstRender.current = false
-    } else {
-      setLoading(true);
-      (async () => {
-        let response = await axios(requestParams)
-        setData({
-          headers: response.headers,
-          data: response.data
-        })
-        setLoading(false)
-      })();
+}
+
+const App = () => {
+  const [state, dispatch] = useReducer(dataReducer, initialData)
+
+  const handleApiCall = async (requestParams) => {
+    dispatch({ type: 'loading' });
+    let response = await axios(requestParams)
+    let newRequest = {
+      requestParams,
+      headers: response.headers,
+      data: response.data
     }
-  }, [requestParams])
+    dispatch({ type: 'add', payload: newRequest })
+    dispatch({ type: 'loading' });
+  }
 
   return (
     <>
       <Header />
-      <div>Request Method: {requestParams.method}</div>
-      <div>URL: {requestParams.url}</div>
-      <Form handleApiCall={handleRequestParams} />
-      <Results data={data} loading={loading} />
+      <div>Request Method: {state.history[state.showRequest]?.requestParams.method}</div>
+      <div>URL: {state.history[state.showRequest]?.requestParams.url}</div>
+      <Form handleApiCall={handleApiCall} />
+      <Results data={state.history[state.showRequest]} loading={state.loading} />
       <Footer />
     </>
   );
