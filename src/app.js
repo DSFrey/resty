@@ -1,4 +1,4 @@
-import { useReducer } from 'react';
+import { useEffect, useReducer } from 'react';
 import axios from 'axios'
 
 import './app.scss';
@@ -20,7 +20,12 @@ export const initialData = {
 export const dataReducer = (state, action) => {
   switch (action.type) {
     case 'add':
-      return { ...state, history: [action.payload, ...state.history], showRequest: 0 };
+      let newHistory = [action.payload, ...state.history]
+      localStorage.setItem('requestHistory', JSON.stringify(newHistory),)
+      return { ...state, history: newHistory, showRequest: 0 };
+
+    case 'getLocalStorage':
+      return { ...state, history: [...action.payload] }
 
     case 'select':
       return { ...state, showRequest: parseInt(action.payload) }
@@ -35,6 +40,12 @@ export const dataReducer = (state, action) => {
 
 const App = () => {
   const [state, dispatch] = useReducer(dataReducer, initialData)
+
+  useEffect(() => {
+    if (localStorage.getItem('requestHistory')) {
+      dispatch({ type: 'getLocalStorage', payload: JSON.parse(localStorage.getItem('requestHistory')) })
+    }
+  }, [])
 
   const handleApiCall = async (requestParams) => {
     dispatch({ type: 'loading' });
