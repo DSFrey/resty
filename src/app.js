@@ -1,4 +1,4 @@
-import { useState, useReducer } from 'react';
+import { useReducer } from 'react';
 import axios from 'axios'
 
 import './app.scss';
@@ -9,6 +9,7 @@ import { Header } from './components/header';
 import { Footer } from './components/footer';
 import { Form } from './components/form';
 import { Results } from './components/results';
+import { History } from './components/history';
 
 export const initialData = {
   history: [],
@@ -20,6 +21,9 @@ export const dataReducer = (state, action) => {
   switch (action.type) {
     case 'add':
       return { ...state, history: [action.payload, ...state.history], showRequest: 0 };
+
+    case 'select':
+      return { ...state, showRequest: parseInt(action.payload) }
 
     case 'loading':
       return { ...state, loading: !state.loading }
@@ -47,8 +51,7 @@ const App = () => {
   return (
     <>
       <Header />
-      <div>Request Method: {state.history[state.showRequest]?.requestParams.method}</div>
-      <div>URL: {state.history[state.showRequest]?.requestParams.url}</div>
+      <History state={state} dispatch={dispatch} />
       <Form handleApiCall={handleApiCall} />
       <Results data={state.history[state.showRequest]} loading={state.loading} />
       <Footer />
